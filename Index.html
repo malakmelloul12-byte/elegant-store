@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Store | نموذج الطلب السريع</title>
+    <!-- استيراد خطوط عربية وإنجليزية فاخرة من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,700;1,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة أيقونات Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                        brand: ['Playfair Display', 'Amiri', 'serif'],
+                        arabicLuxury: ['Amiri', 'serif']
+                    },
+                    colors: {
+                        blush: {
+                            50: '#fff5f7',
+                            100: '#ffe4e9',
+                            200: '#fecdd6',
+                            300: '#fda4b5',
+                            400: '#fb718c',
+                            500: '#f43f66',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* خلفية وردية فاتحة متدرجة ناعمة وراقية */
+        body {
+            background: linear-gradient(135deg, #fff0f4 0%, #ffdde6 45%, #fbcfe0 100%);
+            min-height: 100vh;
+            color: #111111;
+        }
+        /* تأثير الزجاج الفاخر للبطاقة */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow: 0 25px 50px -12px rgba(219, 112, 147, 0.18);
+        }
+        /* تخصيص السكرول بار */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f4;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f4a4b8;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="font-sans text-neutral-900 antialiased selection:bg-pink-200 selection:text-black py-6 px-4 sm:py-10">
+
+    <!-- الحاوية الرئيسية -->
+    <main class="max-w-xl mx-auto">
+        
+        <!-- بطاقة الفورم الرئيسية -->
+        <div class="luxury-card rounded-3xl overflow-hidden transition-all duration-300">
+            
+            <!-- ترويسة المتجر (Header) -->
+            <header class="pt-8 pb-6 px-6 text-center bg-gradient-to-b from-pink-100/70 to-transparent border-b border-pink-200/60 relative">
+                <!-- شارة ترحيبية صغيرة -->
+                <div class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/80 border border-pink-200 text-xs font-bold text-neutral-800 mb-3 shadow-sm">
+                    <i class="fa-solid fa-sparkles text-pink-500"></i>
+                    <span>تشكيلة حصرية • الدفع عند الاستلام</span>
+                </div>
+                
+                <!-- اسم المتجر بخط فاخر -->
+                <h1 dir="ltr" class="font-brand text-4xl sm:text-5xl font-bold tracking-wide text-black drop-shadow-sm">
+                    Elegant Store
+                </h1>
+                <p class="font-arabicLuxury text-lg sm:text-xl text-neutral-800 mt-1.5 font-bold">
+                    أناقة تليق بكِ في كل تفاصيلكِ
+                </p>
+            </header>
+
+            <!-- صندوق التنبيهات المخصص (بديل alert) -->
+            <div id="statusMessage" class="hidden mx-6 mt-5 p-4 rounded-2xl text-sm font-bold flex items-center gap-3 transition-all duration-300">
+                <i id="statusIcon" class="text-lg"></i>
+                <span id="statusText"></span>
+            </div>
+
+            <!-- نموذج الطلب (Form) -->
+            <form id="orderForm" class="p-6 sm:p-8 space-y-5" novalidate>
+                
+                <!-- 1. الاسم الكامل -->
+                <div>
+                    <label for="fullName" class="block text-sm font-bold text-black mb-1.5">
+                        <i class="fa-regular fa-user text-pink-600 ml-1.5"></i>الاسم الكامل <span class="text-pink-600">*</span>
+                    </label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="أدخلي اسمكِ الكامل هنا..."
+                        class="w-full px-4 py-3.5 rounded-2xl bg-pink-50/50 border border-pink-200 text-black placeholder-neutral-500 font-medium focus:outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-pink-200 transition-all">
+                </div>
+
+                <!-- 2. المنتوج (قائمة منسدلة بمنتجات وأثمنة) -->
+                <div>
+                    <label for="product" class="block text-sm font-bold text-black mb-1.5">
+                        <i class="fa-solid fa-bag-shopping text-pink-600 ml-1.5"></i>اختر المنتوج <span class="text-pink-600">*</span>
+                    </label>
+                    <div class="relative">
+                        <select id="product" name="product" required
+                            class="w-full px-4 py-3.5 rounded-2xl bg-pink-50/50 border border-pink-200 text-black font-bold appearance-none cursor-pointer focus:outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-pink-200 transition-all">
+                            <option value="" data-price="0" disabled selected>-- اضغط لاختيار المنتوج المناسب --</option>
+                            <option value="فستان سهرة حريري فاخر" data-price="450">فستان سهرة حريري فاخر — 450 درهم</option>
+                            <option value="طقم كاجوال أنيق قطعتين" data-price="320">طقم كاجوال أنيق قطعتين — 320 درهم</option>
+                            <option value="عباية مطرزة بلمسة عصرية" data-price="390">عباية مطرزة بلمسة عصرية — 390 درهم</option>
+                            <option value="حقيبة يد جلدية كلاسيكية" data-price="280">حقيبة يد جلدية كلاسيكية — 280 درهم</option>
+                            <option value="بليزر رسمي بقصة راقية" data-price="350">بليزر رسمي بقصة راقية — 350 درهم</option>
+                            <option value="فستان صيفي ناعم بنقشة ورود" data-price="260">فستان صيفي ناعم بنقشة ورود — 260 درهم</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center px-4 text-black">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. المقاس -->
+                <div>
+                    <label class="block text-sm font-bold text-black mb-2">
+                        <i class="fa-solid fa-ruler-horizontal text-pink-600 ml-1.5"></i>المقاس <span class="text-pink-600">*</span>
+                    </label>
+                    <div class="grid grid-cols-5 gap-2" id="sizeContainer">
+                        <button type="button" data-size="S" class="size-btn py-2.5 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-sm hover:border-black transition-all">S</button>
+                        <button type="button" data-size="M" class="size-btn py-2.5 rounded-xl border-2 border-black bg-pink-200/70 text-black font-extrabold text-sm shadow-sm transition-all">M</button>
+                        <button type="button" data-size="L" class="size-btn py-2.5 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-sm hover:border-black transition-all">L</button>
+                        <button type="button" data-size="XL" class="size-btn py-2.5 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-sm hover:border-black transition-all">XL</button>
+                        <button type="button" data-size="XXL" class="size-btn py-2.5 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-sm hover:border-black transition-all">XXL</button>
+                    </div>
+                    <input type="hidden" id="selectedSize" name="size" value="M">
+                </div>
+
+                <!-- 4. اللون -->
+                <div>
+                    <label class="block text-sm font-bold text-black mb-2">
+                        <i class="fa-solid fa-palette text-pink-600 ml-1.5"></i>اللون المفضل <span class="text-pink-600">*</span>
+                    </label>
+                    <div class="flex flex-wrap gap-2.5" id="colorContainer">
+                        <button type="button" data-color="أسود ملكي" class="color-btn flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-pink-200/70 text-black font-bold text-xs sm:text-sm shadow-sm transition-all">
+                            <span class="w-4 h-4 rounded-full bg-neutral-900 border border-black/20"></span>
+                            <span>أسود ملكي</span>
+                        </button>
+                        <button type="button" data-color="وردي باستيل" class="color-btn flex items-center gap-2 px-3.5 py-2 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-xs sm:text-sm hover:border-black transition-all">
+                            <span class="w-4 h-4 rounded-full bg-pink-300 border border-black/20"></span>
+                            <span>وردي باستيل</span>
+                        </button>
+                        <button type="button" data-color="أبيض عاجي" class="color-btn flex items-center gap-2 px-3.5 py-2 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-xs sm:text-sm hover:border-black transition-all">
+                            <span class="w-4 h-4 rounded-full bg-[#fdfbf7] border border-neutral-400"></span>
+                            <span>أبيض عاجي</span>
+                        </button>
+                        <button type="button" data-color="بيج رملي" class="color-btn flex items-center gap-2 px-3.5 py-2 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-xs sm:text-sm hover:border-black transition-all">
+                            <span class="w-4 h-4 rounded-full bg-[#e3cbb2] border border-black/20"></span>
+                            <span>بيج رملي</span>
+                        </button>
+                        <button type="button" data-color="عنابي" class="color-btn flex items-center gap-2 px-3.5 py-2 rounded-xl border border-pink-200 bg-pink-50/50 text-black font-bold text-xs sm:text-sm hover:border-black transition-all">
+                            <span class="w-4 h-4 rounded-full bg-[#6b1d2f] border border-black/20"></span>
+                            <span>عنابي</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="selectedColor" name="color" value="أسود ملكي">
+                </div>
+
+                <!-- 5. الكمية + ملخص السعر الفوري -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label for="quantity" class="block text-sm font-bold text-black mb-1.5">
+                            <i class="fa-solid fa-layer-group text-pink-600 ml-1.5"></i>الكمية <span class="text-pink-600">*</span>
+                        </label>
+                        <div class="flex items-center rounded-2xl bg-pink-50/50 border border-pink-200 p-1">
+                            <button type="button" id="decreaseQty" aria-label="إنقاص الكمية"
+                                class="w-11 h-11 rounded-xl bg-white text-black font-bold text-lg shadow-sm hover:bg-pink-100 active:scale-95 transition-all flex items-center justify-center">
+                                <i class="fa-solid fa-minus text-xs"></i>
+                            </button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="50" readonly
+                                class="w-full text-center bg-transparent text-black font-extrabold text-lg focus:outline-none">
+                            <button type="button" id="increaseQty" aria-label="زيادة الكمية"
+                                class="w-11 h-11 rounded-xl bg-white text-black font-bold text-lg shadow-sm hover:bg-pink-100 active:scale-95 transition-all flex items-center justify-center">
+                                <i class="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- بطاقة السعر الإجمالي المباشر -->
+                    <div class="p-3.5 rounded-2xl bg-gradient-to-l from-pink-200/80 to-pink-100/80 border border-pink-300 flex items-center justify-between">
+                        <div>
+                            <span class="block text-xs font-bold text-neutral-800">المجموع الإجمالي:</span>
+                            <span class="text-[11px] font-medium text-neutral-700">توصيل سريع لكل المدن</span>
+                        </div>
+                        <div class="text-left">
+                            <span id="totalPriceDisplay" class="text-2xl font-extrabold text-black">0</span>
+                            <span class="text-xs font-bold text-black mr-0.5">درهم</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. المدينة -->
+                <div>
+                    <label for="city" class="block text-sm font-bold text-black mb-1.5">
+                        <i class="fa-solid fa-city text-pink-600 ml-1.5"></i>المدينة <span class="text-pink-600">*</span>
+                    </label>
+                    <input type="text" id="city" name="city" list="moroccanCities" required placeholder="اختر أو اكتب اسم مدينتك (مثلاً: الدار البيضاء، طنجة...)"
+                        class="w-full px-4 py-3.5 rounded-2xl bg-pink-50/50 border border-pink-200 text-black placeholder-neutral-500 font-medium focus:outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-pink-200 transition-all">
+                    <datalist id="moroccanCities">
+                        <option value="الدار البيضاء">
+                        <option value="الرباط">
+                        <option value="طنجة">
+                        <option value="مراكش">
+                        <option value="فاس">
+                        <option value="أكادير">
+                        <option value="مكناس">
+                        <option value="وجدة">
+                        <option value="القنيطرة">
+                        <option value="تطوان">
+                        <option value="المحمدية">
+                        <option value="الجديدة">
+                        <option value="بني ملال">
+                        <option value="الناظور">
+                    </datalist>
+                </div>
+
+                <!-- 7. العنوان الكامل -->
+                <div>
+                    <label for="address" class="block text-sm font-bold text-black mb-1.5">
+                        <i class="fa-solid fa-location-dot text-pink-600 ml-1.5"></i>العنوان الكامل <span class="text-pink-600">*</span>
+                    </label>
+                    <textarea id="address" name="address" rows="2" required placeholder="الحي، اسم الشارع، رقم المنزل أو أقرب معلمة..."
+                        class="w-full px-4 py-3 rounded-2xl bg-pink-50/50 border border-pink-200 text-black placeholder-neutral-500 font-medium focus:outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-pink-200 transition-all resize-none"></textarea>
+                </div>
+
+                <!-- 8. رقم الهاتف -->
+                <div>
+                    <label for="phone" class="block text-sm font-bold text-black mb-1.5">
+                        <i class="fa-solid fa-phone text-pink-600 ml-1.5"></i>رقم الهاتف (واتساب) <span class="text-pink-600">*</span>
+                    </label>
+                    <input type="tel" id="phone" name="phone" dir="ltr" required placeholder="06 XX XX XX XX"
+                        class="w-full px-4 py-3.5 rounded-2xl bg-pink-50/50 border border-pink-200 text-black text-right placeholder-neutral-500 font-bold tracking-wider focus:outline-none focus:bg-white focus:border-black focus:ring-2 focus:ring-pink-200 transition-all">
+                </div>
+
+                <!-- زر الإرسال إلى واتساب و Google Sheet -->
+                <div class="pt-2">
+                    <button type="submit" id="submitBtn"
+                        class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-pink-300 via-pink-200 to-pink-300 hover:from-pink-400 hover:to-pink-300 border-2 border-black text-black font-extrabold text-base sm:text-lg shadow-lg hover:shadow-xl active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-2xl text-emerald-700"></i>
+                        <span id="submitBtnText">تأكيد الطلب وإرساله عبر واتساب</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- تذييل الصفحة مع رسالة الشكر الراقية -->
+            <footer class="px-6 py-6 bg-pink-100/60 border-t border-pink-200/70 text-center space-y-2">
+                <p class="font-arabicLuxury text-lg sm:text-xl font-bold text-black">
+                    "شكراً لاختياركِ <span dir="ltr" class="font-brand">Elegant Store</span> ✨ يسعدنا دائماً أن نكون جزءاً من تألقكِ وأناقتكِ."
+                </p>
+                <p class="text-xs font-medium text-neutral-800">
+                    سنتواصل معكِ فوراً لتأكيد الطلب • نتمنى لكِ تجربة تسوق ممتعة 🌸
+                </p>
+                
+                <!-- زر خفي/أنيق لصاحب البورتفوليو لعرض كود Google Apps Script -->
+                <div class="pt-2">
+                    <button type="button" id="openScriptModal" class="text-[11px] text-neutral-600 hover:text-black underline transition-colors">
+                        <i class="fa-solid fa-code ml-1"></i>كود ربط Google Sheet (للمطور)
+                    </button>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <!-- نافذة منبثقة (Modal) تعرض كود Google Apps Script الجاهز للنسخ -->
+    <div id="scriptModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-pink-200 text-right space-y-4">
+            <div class="flex items-center justify-between border-b border-pink-100 pb-3">
+                <h3 class="font-bold text-lg text-black">كود Google Apps Script لجدول البيانات</h3>
+                <button type="button" id="closeScriptModal" class="w-8 h-8 rounded-full bg-pink-100 text-black flex items-center justify-center hover:bg-pink-200">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <p class="text-xs text-neutral-700 leading-relaxed">
+                هذا الفورم مربوط مسبقاً بالرابط الخاص بكِ. في حال أردتِ التأكد من أن الأعمدة في Google Sheet تستقبل البيانات بشكل مثالي، ضعي هذا الكود في <strong>Extensions &gt; Apps Script</strong>:
+            </p>
+            <div class="relative">
+                <pre id="appsScriptCode" dir="ltr" class="bg-neutral-900 text-pink-200 p-3.5 rounded-2xl text-xs overflow-x-auto text-left font-mono leading-relaxed">function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = e.parameter;
+  
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(["التاريخ", "الاسم الكامل", "المنتوج", "المقاس", "اللون", "الكمية", "ثمن الوحدة", "المجموع", "المدينة", "العنوان", "رقم الهاتف"]);
+  }
+  
+  sheet.appendRow([
+    new Date().toLocaleString("ar-MA"),
+    data.fullName || "",
+    data.product || "",
+    data.size || "",
+    data.color || "",
+    data.quantity || "",
+    data.unitPrice || "",
+    data.totalPrice || "",
+    data.city || "",
+    data.address || "",
+    "'" + (data.phone || "")
+  ]);
+  
+  return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}</pre>
+                <button type="button" id="copyScriptBtn" class="mt-3 w-full py-2.5 rounded-xl bg-pink-200 hover:bg-pink-300 text-black font-bold text-xs transition-all">
+                    <i class="fa-regular fa-copy ml-1"></i>نسخ الكود
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // الثوابت والإعدادات الخاصة بالمتجر
+        const WHATSAPP_NUMBER = "212722082326"; // الرقم 0722082326 بصيغة واتساب الدولية للمغرب
+        const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzcDWPSyJ2y8nDnFpoBJFhyN37oUxGgS0yIeXWXaxAr2f1837r2c38DmjXlXEc4v5Z3/exec";
+
+        // عناصر DOM
+        const form = document.getElementById('orderForm');
+        const productSelect = document.getElementById('product');
+        const quantityInput = document.getElementById('quantity');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        const decreaseQtyBtn = document.getElementById('decreaseQty');
+        const increaseQtyBtn = document.getElementById('increaseQty');
+        const sizeButtons = document.querySelectorAll('.size-btn');
+        const selectedSizeInput = document.getElementById('selectedSize');
+        const colorButtons = document.querySelectorAll('.color-btn');
+        const selectedColorInput = document.getElementById('selectedColor');
+        const statusMessage = document.getElementById('statusMessage');
+        const statusIcon = document.getElementById('statusIcon');
+        const statusText = document.getElementById('statusText');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = document.getElementById('submitBtnText');
+
+        // دالة حساب وتحديث السعر الإجمالي تلقائياً
+        function updateTotalPrice() {
+            const selectedOption = productSelect.options[productSelect.selectedIndex];
+            const unitPrice = selectedOption ? parseFloat(selectedOption.getAttribute('data-price')) || 0 : 0;
+            const quantity = parseInt(quantityInput.value) || 1;
+            const total = unitPrice * quantity;
+            totalPriceDisplay.textContent = total;
+            return { unitPrice, total };
+        }
+
+        // الاستماع لتغيير المنتوج
+        productSelect.addEventListener('change', updateTotalPrice);
+
+        // أزرار زيادة وإنقاص الكمية
+        decreaseQtyBtn.addEventListener('click', () => {
+            let current = parseInt(quantityInput.value) || 1;
+            if (current > 1) {
+                quantityInput.value = current - 1;
+                updateTotalPrice();
+            }
+        });
+
+        increaseQtyBtn.addEventListener('click', () => {
+            let current = parseInt(quantityInput.value) || 1;
+            if (current < 50) {
+                quantityInput.value = current + 1;
+                updateTotalPrice();
+            }
+        });
+
+        // اختيار المقاس التفاعلي
+        sizeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                sizeButtons.forEach(b => {
+                    b.classList.remove('border-2', 'border-black', 'bg-pink-200/70', 'font-extrabold', 'shadow-sm');
+                    b.classList.add('border', 'border-pink-200', 'bg-pink-50/50', 'font-bold');
+                });
+                btn.classList.remove('border', 'border-pink-200', 'bg-pink-50/50', 'font-bold');
+                btn.classList.add('border-2', 'border-black', 'bg-pink-200/70', 'font-extrabold', 'shadow-sm');
+                selectedSizeInput.value = btn.getAttribute('data-size');
+            });
+        });
+
+        // اختيار اللون التفاعلي
+        colorButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                colorButtons.forEach(b => {
+                    b.classList.remove('border-2', 'border-black', 'bg-pink-200/70', 'shadow-sm');
+                    b.classList.add('border', 'border-pink-200', 'bg-pink-50/50');
+                });
+                btn.classList.remove('border', 'border-pink-200', 'bg-pink-50/50');
+                btn.classList.add('border-2', 'border-black', 'bg-pink-200/70', 'shadow-sm');
+                selectedColorInput.value = btn.getAttribute('data-color');
+            });
+        });
+
+        // دالة إظهار رسائل التنبيه بشكل أنيق (بدون alert)
+        function showNotification(message, type = 'error') {
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-900', 'border-red-300', 'bg-emerald-100', 'text-emerald-900', 'border-emerald-300');
+            if (type === 'error') {
+                statusMessage.classList.add('bg-red-100', 'text-red-900', 'border', 'border-red-300');
+                statusIcon.className = 'fa-solid fa-circle-exclamation text-red-600 text-lg';
+            } else {
+                statusMessage.classList.add('bg-emerald-100', 'text-emerald-900', 'border', 'border-emerald-300');
+                statusIcon.className = 'fa-solid fa-circle-check text-emerald-600 text-lg';
+            }
+            statusText.textContent = message;
+            statusMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // معالجة إرسال الفورم
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // جمع القيم وتنظيفها
+            const fullName = document.getElementById('fullName').value.trim();
+            const product = productSelect.value;
+            const size = selectedSizeInput.value;
+            const color = selectedColorInput.value;
+            const quantity = quantityInput.value;
+            const city = document.getElementById('city').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const { unitPrice, total } = updateTotalPrice();
+
+            // التحقق من صحة المدخلات
+            if (!fullName) {
+                showNotification('يرجى إدخال الاسم الكامل لإتمام الطلب.');
+                document.getElementById('fullName').focus();
+                return;
+            }
+            if (!product) {
+                showNotification('يرجى اختيار المنتوج المطلوب من القائمة.');
+                productSelect.focus();
+                return;
+            }
+            if (!city) {
+                showNotification('يرجى إدخال اسم المدينة.');
+                document.getElementById('city').focus();
+                return;
+            }
+            if (!address) {
+                showNotification('يرجى كتابة العنوان الكامل لتسهيل عملية التوصيل.');
+                document.getElementById('address').focus();
+                return;
+            }
+            if (!phone || phone.replace(/\D/g, '').length < 9) {
+                showNotification('يرجى إدخال رقم هاتف صحيح مكون من 10 أرقام.');
+                document.getElementById('phone').focus();
+                return;
+            }
+
+            // تفعيل حالة التحميل على الزر
+            submitBtn.disabled = true;
+            submitBtnText.textContent = 'جاري تسجيل طلبكِ وتحويلكِ لواتساب...';
+
+            // 1. إرسال البيانات إلى Google Sheet عبر Apps Script
+            try {
+                const formData = new URLSearchParams();
+                formData.append('fullName', fullName);
+                formData.append('product', product);
+                formData.append('size', size);
+                formData.append('color', color);
+                formData.append('quantity', quantity);
+                formData.append('unitPrice', unitPrice + ' درهم');
+                formData.append('totalPrice', total + ' درهم');
+                formData.append('city', city);
+                formData.append('address', address);
+                formData.append('phone', phone);
+
+                // استخدام no-cors لضمان عدم حظر المتصفح لطلب Google Apps Script
+                await fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData.toString()
+                });
+            } catch (error) {
+                console.error('Google Sheet Sync Error:', error);
+                // نستمر في فتح واتساب حتى في حال ضعف الشبكة
+            }
+
+            // 2. تجهيز رسالة واتساب منسقة باحترافية
+            const whatsappText = 
+`🌸 *طلب جديد من متجر Elegant Store* 🌸
+━━━━━━━━━━━━━━━━━━
+👤 *الاسم الكامل:* ${fullName}
+👗 *المنتوج:* ${product}
+📏 *المقاس:* ${size}
+🎨 *اللون:* ${color}
+🔢 *الكمية:* ${quantity}
+💰 *المجموع الإجمالي:* ${total} درهم
+━━━━━━━━━━━━━━━━━━
+🏙️ *المدينة:* ${city}
+📍 *العنوان الكامل:* ${address}
+📱 *رقم الهاتف:* ${phone}
+━━━━━━━━━━━━━━━━━━
+✨ _شكراً لثقتكِ بـ Elegant Store_`;
+
+            const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`;
+
+            // إظهار رسالة نجاح وإعادة تعيين الزر
+            showNotification('تم حفظ طلبكِ بنجاح! جاري فتح تطبيق واتساب...', 'success');
+            
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+                submitBtn.disabled = false;
+                submitBtnText.textContent = 'تأكيد الطلب وإرساله عبر واتساب';
+            }, 600);
+        });
+
+        // التحكم بنافذة كود Google Apps Script
+        const scriptModal = document.getElementById('scriptModal');
+        const openScriptModal = document.getElementById('openScriptModal');
+        const closeScriptModal = document.getElementById('closeScriptModal');
+        const copyScriptBtn = document.getElementById('copyScriptBtn');
+
+        openScriptModal.addEventListener('click', () => {
+            scriptModal.classList.remove('hidden');
+            scriptModal.classList.add('flex');
+        });
+
+        closeScriptModal.addEventListener('click', () => {
+            scriptModal.classList.add('hidden');
+            scriptModal.classList.remove('flex');
+        });
+
+        scriptModal.addEventListener('click', (e) => {
+            if (e.target === scriptModal) {
+                scriptModal.classList.add('hidden');
+                scriptModal.classList.remove('flex');
+            }
+        });
+
+        copyScriptBtn.addEventListener('click', () => {
+            const codeText = document.getElementById('appsScriptCode').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            
+            copyScriptBtn.innerHTML = '<i class="fa-solid fa-check ml-1"></i>تم نسخ الكود بنجاح!';
+            setTimeout(() => {
+                copyScriptBtn.innerHTML = '<i class="fa-regular fa-copy ml-1"></i>نسخ الكود';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
